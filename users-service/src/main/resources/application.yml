@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: users-service
+  datasource:
+    url: jdbc:mysql://user-mysql:3306/user-bd
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  logging:
+    level:
+      org.springframework.web: INFO
+
+server:
+    port: 10000
