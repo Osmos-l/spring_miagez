@@ -13,65 +13,38 @@ spring:
       # Configuration des routes de l'API Gateway
       routes:
         #Service CLIENTS-SERVICE
-        - id: client-service
-          uri: lb://CLIENTSSERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
+        - id: users-service
+          uri: lb://USERS-SERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
           predicates:
             # On matche tout ce qui commence par /api/clients
-            - Path=/api/clients/**
+            - Path=/api/users/**
           filters:
             # On va réécrire l'URL pour enlever le /api/client
-            - RewritePath=/api/clients(?<segment>/?.*), /$\{segment}
-        #Service COMPTES-SERVICE
-        - id: comptes-service
-          uri: lb://COMPTESSERVICE/
-          predicates:
-            - Path=/api/comptes/**
-          filters:
-            - RewritePath=/api/comptes(?<segment>/?.*), /$\{segment}
+            - RewritePath=/api/users(?<segment>/?.*), /$\{segment}
         #Service CLIENTS-COMPTES
-        - id: clients-comptes
-          uri: lb://CLIENTSCOMPTES/
+        - id: user-class
+          uri: lb://USER-CLASS/
           predicates:
-            - Path=/api/clientscomptes/**
+            - Path=/api/userclass/**
           filters:
-            - RewritePath=/api/clientscomptes(?<segment>/?.*), /$\{segment}
+            - RewritePath=/api/userclass(?<segment>/?.*), /$\{segment}
       enabled: on # Activation gateway
     # Activation remontée management dans Eureka
     config:
       service-registry:
         auto-registration:
           register-management: on
-# Activation des endpoints pour le monitoring
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-          env,health,
-          info,metrics,
-          loggers,mappings, prometheus
-# Configuration client de l'annuaire
-# L'API Gateway va s'enregistrer comme un micro-service sur l'annuaire
+
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:10001/eureka/ # url d'accès à l'annuaire
-  instance:
-    metadata-map:
-      prometheus.scrape: "true"
-      prometheus.path: "/actuator/prometheus"
-      prometheus.port: "${management.server.port}"
-      #    instance:
-      #      metadataMap:
-      # on va surcharger le nom de l'application si plusieurs instances de l'API Gateway ont même IP et même port
-      # on surcharge par une valeur random si le nom de l'instance existe déjà.
-#        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      defaultZone: http://annuaire-service:1111/eureka/ # url d'accès à l'annuaire
 
 
-# Configuration du log.
 logging:
   level:
-    org.springframework.web: INFO # Choix du niveau de log affiché
-# Proprietes du serveur d'entreprise
+    org.springframework.web: INFO
+
 server:
-  port: 10000   # HTTP (Tomcat) port
+  port: 10001
