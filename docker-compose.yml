@@ -4,6 +4,19 @@ version: '3.8'
 
 # Define services
 services:
+  # Annuaire Eureka
+  annuaire-service:
+    # Lancement service Annuaire
+    build:
+      context: annuaire
+      dockerfile: Dockerfile
+    image: annuaire-service:7.0
+    ports:
+      - "1111:1111"
+    restart: always 
+    container_name: annuaire-service
+    networks:
+      - backend
   # DB du micro service de gestion des utilisateurs
   user-mysql:
     image: mysql:oracle
@@ -29,13 +42,13 @@ services:
       - "10000:10000"
     container_name: user-service
     depends_on: 
-      user-mysql:
-        condition: service_healthy
+      - annuaire-service
+      - user-mysql
     networks: 
       - backusers
       - backend
     environment:
-      WAIT_HOSTS: user-mysql:3306
+      WAIT_HOSTS: user-mysql:3306, annuaire-service:1111
   # Micro-service composite de gestion des utilisateurs avec cours
   user-class-service:
     build:
