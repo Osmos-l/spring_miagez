@@ -5,7 +5,9 @@ import fr.miage.UsersCours.transientobj.UserWithClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 public class UserWithClassRepositoryImpl implements UserWithClassRepository {
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -20,10 +22,16 @@ public class UserWithClassRepositoryImpl implements UserWithClassRepository {
     }
 
     @Override
-    public User getUserWithClass(Long idUser) {
+    public User getUserWithClass(Long idUser) throws Exception {
         logger.info("On a la demande");
 
-        User user = restTemplateUser.getForObject(this.userServiceURL+"/{id}", User.class, idUser);
+        User user = null;
+        try {
+            user = restTemplateUser.getForObject(this.userServiceURL+"/{id}", User.class, idUser);
+        } catch (RestClientResponseException ex) {
+            logger.info("on a une erreur : {}", ex);
+            throw new Exception(ex.getMessage());
+        }
         logger.info("On a la réponse : {}", user);
 
         UserWithClass userWithClass = new UserWithClass();
@@ -33,13 +41,23 @@ public class UserWithClassRepositoryImpl implements UserWithClassRepository {
         userWithClass.setEmail(user.getEmail());
         userWithClass.setLogin(user.getLogin());
         userWithClass.setPassword(user.getPassword());
-        return user;
+        userWithClass.setIsPresident(user.getIsPresident());
+        userWithClass.setIsSecretary(user.getIsSecretary());
+        userWithClass.setIsTeacher(user.getIsTeacher());
+
+        return userWithClass;
     }
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws Exception {
         logger.info("On a la demande");
-        user = restTemplateUser.postForObject(this.userServiceURL+"/", user, User.class);
+
+        try {
+            user = restTemplateUser.postForObject(this.userServiceURL+"/", user, User.class);
+        } catch (RestClientResponseException ex) {
+            logger.info("on a une erreur : {}", ex);
+            throw new Exception(ex.getMessage());
+        }
 
         logger.info("On a la réponse : {}", user);
         return user;

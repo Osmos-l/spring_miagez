@@ -1,5 +1,3 @@
-# Docker Compose Banque Micro-Service
-
 # Automatise le lancement de l'infrastructure micro-services
 
 version: '3.8'
@@ -15,7 +13,7 @@ services:
       MYSQL_DATABASE: user-bd
       MYSQL_ROOT_PASSWORD: root
     networks:
-      - backclients
+      - backusers
     healthcheck:
       test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
       timeout: 20s
@@ -27,23 +25,25 @@ services:
       dockerfile: Dockerfile
     image: user-service:7.0
     restart: "no" 
+    ports: # Ouverture des ports pour dev ONLY
+      - "10000:10000"
     container_name: user-service
     depends_on: 
       user-mysql:
         condition: service_healthy
     networks: 
-      - backclients
+      - backusers
       - backend
     environment:
-      WAIT_HOSTS: user-mysql:3306 # Attente demarrage services (attente 30s MAX)
+      WAIT_HOSTS: user-mysql:3306
+  # Micro-service composite de gestion des utilisateurs avec cours
   user-class-service:
-    # Lancement service de client-comptes 
     build:
       context: userscours # Répertoire (dans répertoire courant) contenant le dockerfile
       dockerfile: Dockerfile
-    image: user-class-service:7.0 # Pour placer le TAG de version sur le nom de l'image
+    image: user-class-service:7.0
     restart: "no"
-    ports:
+    ports: # Ouverture des ports pour dev ONLY
       - "30000:30000"
     container_name: user-class-service
     depends_on: 
@@ -51,9 +51,9 @@ services:
     networks: 
       - backend
     environment:
-      WAIT_HOSTS: user-service:10000 # Attente demarrage services (attente 30s MAX)
+      WAIT_HOSTS: user-service:10000
 # Networks to be created to facilitate communication between containers
 networks:
-  backclients:
+  backusers:
   backend:
 

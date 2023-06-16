@@ -8,3 +8,5 @@ logging:
 
 server:
   port: 30000
+  error:
+    include-message: always

@@ -6,6 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
 
     public long id;
@@ -19,4 +20,10 @@ public class User {
     public String login;
 
     public String password;
+
+    public Boolean isTeacher = false;
+
+    public Boolean isSecretary = false;
+
+    public Boolean isPresident = false;
 }

@@ -31,4 +31,13 @@ public class User {
 
     @NonNull
     public String password;
+
+    @NonNull
+    public Boolean isTeacher = false;
+
+    @NonNull
+    public Boolean isSecretary = false;
+
+    @NonNull
+    public Boolean isPresident = false;
 }
