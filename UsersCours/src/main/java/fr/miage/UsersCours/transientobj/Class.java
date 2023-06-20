@@ -20,5 +20,5 @@ public class Class {
 
     public String location;
 
-    public String idParticipants;
+    public ArrayList<Long> idParticipants;
 }

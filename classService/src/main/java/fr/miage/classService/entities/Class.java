@@ -1,5 +1,7 @@
 package fr.miage.classService.entities;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -33,4 +35,14 @@ public class Class {
 
     @NonNull
     public String idParticipants;
+
+    public ArrayList<Long> getIdParticipants() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(this.idParticipants, new TypeReference<ArrayList<Long>>() {});
+        } catch (Exception ex) {
+            return new ArrayList<Long>();
+        }
+
+    }
 }

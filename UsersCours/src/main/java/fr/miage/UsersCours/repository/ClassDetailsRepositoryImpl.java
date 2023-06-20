@@ -62,20 +62,13 @@ public class ClassDetailsRepositoryImpl implements ClassDetailsRepository {
 
         classDetails.setIdParticipants(simpleClass.getIdParticipants());
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ArrayList<Long> idParticipantsList = objectMapper.readValue(simpleClass.getIdParticipants(), new TypeReference<ArrayList<Long>>() {});
-
-            idParticipantsList.forEach((Long idParticipants) -> {
-                try {
-                    User participant = restTemplateUser.getForObject(this.userServiceURL+"/{id}", User.class, idParticipants);
-                    classDetails.getParticipants().add(participant);
-                } catch (RestClientResponseException ex) {
-                    logger.info("on a une erreur : {}", ex);
-                }
-            });
-        } catch (IOException ex) {
-            logger.info("on a une erreur : {}", ex);
+        for (Long participantId : classDetails.getIdParticipants()) {
+            try {
+                User participant = restTemplateUser.getForObject(this.userServiceURL+"/{id}", User.class, participantId);
+                classDetails.getParticipants().add(participant);
+            } catch (Exception ex) {
+                logger.info("on a une erreur : {}", ex);
+            }
         }
 
         return classDetails;

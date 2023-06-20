@@ -16,19 +16,19 @@ spring:
         - id: users-service
           uri: lb://USERS-SERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
           predicates:
-            # On matche tout ce qui commence par /api/clients
+            # On matche tout ce qui commence par /api/users
             - Path=/api/users/**
           filters:
-            # On va réécrire l'URL pour enlever le /api/client
+            # On va réécrire l'URL pour enlever le /api/users
             - RewritePath=/api/users(?<segment>/?.*), /$\{segment}
         #Service CLASS-SERVICE
         - id: classes-service
           uri: lb://CLASSES-SERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
           predicates:
-            # On matche tout ce qui commence par /api/clients
+            # On matche tout ce qui commence par /api/class
             - Path=/api/class/**
           filters:
-            # On va réécrire l'URL pour enlever le /api/client
+            # On va réécrire l'URL pour enlever le /api/class
             - RewritePath=/api/class(?<segment>/?.*), /$\{segment}
         #Service Composite utilisateurs et classes
         - id: user-class
