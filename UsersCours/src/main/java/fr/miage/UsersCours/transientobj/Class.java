@@ -3,6 +3,7 @@ package fr.miage.UsersCours.transientobj;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +20,8 @@ public class Class {
     public String duration;
 
     public String location;
+
+    public Date date;
 
     public ArrayList<Long> idParticipants;
 }

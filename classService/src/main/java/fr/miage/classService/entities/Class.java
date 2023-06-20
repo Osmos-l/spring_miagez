@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.util.ArrayList;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,9 @@ public class Class {
 
     @NonNull
     public String duration;
+
+    @NonNull
+    public Date date;
 
     @NonNull
     public String location;
