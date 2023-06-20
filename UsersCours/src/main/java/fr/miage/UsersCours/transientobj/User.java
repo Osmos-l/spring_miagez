@@ -17,9 +17,10 @@ public class User {
 
     public String email;
 
-    public String login;
+    // Données pas utile dans un sens métier
+    // public String login;
 
-    public String password;
+    // public String password;
 
     public Boolean isTeacher = false;
 

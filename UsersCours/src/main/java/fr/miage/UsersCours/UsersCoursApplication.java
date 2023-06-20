@@ -1,7 +1,7 @@
 package fr.miage.UsersCours;
 
-import fr.miage.UsersCours.repository.UserWithClassRepository;
-import fr.miage.UsersCours.repository.UserWithClassRepositoryImpl;
+import fr.miage.UsersCours.repository.ClassDetailsRepository;
+import fr.miage.UsersCours.repository.ClassDetailsRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -15,6 +15,8 @@ public class UsersCoursApplication {
 
 	public static final String USER_SERVICE_URL = "http://USERS-SERVICE";
 
+	public static final String CLASS_SERVICE_URL = "http://CLASSES-SERVICE";
+
 	public static void main(String[] args) {
 		SpringApplication.run(UsersCoursApplication.class, args);
 	}
@@ -26,7 +28,7 @@ public class UsersCoursApplication {
 	}
 
 	@Bean
-	public UserWithClassRepository userWithClassRepository() {
-		return new UserWithClassRepositoryImpl(USER_SERVICE_URL);
+	public ClassDetailsRepository userWithClassRepository() {
+		return new ClassDetailsRepositoryImpl(USER_SERVICE_URL, CLASS_SERVICE_URL);
 	}
 }

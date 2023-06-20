@@ -12,7 +12,7 @@ spring:
           # car le nom des services est en minuscule dans l'URL
       # Configuration des routes de l'API Gateway
       routes:
-        #Service CLIENTS-SERVICE
+        #Service USER-SERVICE
         - id: users-service
           uri: lb://USERS-SERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
           predicates:
@@ -21,13 +21,22 @@ spring:
           filters:
             # On va réécrire l'URL pour enlever le /api/client
             - RewritePath=/api/users(?<segment>/?.*), /$\{segment}
-        #Service CLIENTS-COMPTES
+        #Service CLASS-SERVICE
+        - id: classes-service
+          uri: lb://CLASSES-SERVICE/ #Attention : lb et pas HTTP. Lb est prêt pour faire du load-balancing
+          predicates:
+            # On matche tout ce qui commence par /api/clients
+            - Path=/api/class/**
+          filters:
+            # On va réécrire l'URL pour enlever le /api/client
+            - RewritePath=/api/class(?<segment>/?.*), /$\{segment}
+        #Service Composite utilisateurs et classes
         - id: user-class
           uri: lb://USER-CLASS/
           predicates:
-            - Path=/api/userclass/**
+            - Path=/api/classdetails/**
           filters:
-            - RewritePath=/api/userclass(?<segment>/?.*), /$\{segment}
+            - RewritePath=/api/classdetails(?<segment>/?.*), /$\{segment}
       enabled: on # Activation gateway
     # Activation remontée management dans Eureka
     config:

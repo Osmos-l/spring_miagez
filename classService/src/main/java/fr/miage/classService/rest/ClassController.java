@@ -1,33 +1,36 @@
-package fr.miage.UsersCours.rest;
+package fr.miage.classService.rest;
 
-import fr.miage.UsersCours.repository.ClassDetailsRepository;
-import fr.miage.UsersCours.transientobj.ClassDetails;
+import fr.miage.classService.entities.Class;
+import fr.miage.classService.services.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-@RestController("/")
-public class UserController {
+@RestController
+@RequestMapping("/")
+public class ClassController {
 
     @Autowired
-    ClassDetailsRepository classDetailsRepository;
+    ClassService classService;
 
     @GetMapping("{id}")
-    public ClassDetails getClassDetails(@PathVariable("id") Long id) {
+    public Class getClass(@PathVariable("id") Long id) {
         try {
-            return this.classDetailsRepository.getClassDetails(id);
+            return this.classService.getClassByID(id);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+
+    }
+
+
+    @PostMapping("")
+    public Class postClass(@RequestBody Class toCreate) {
+        try {
+            return this.classService.createClass(toCreate);
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
-
-    /*@PostMapping("")
-    public ClassDetails post(@RequestBody User user) {
-        try {
-            return this.userWithClassRepository.save(user);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
-        }
-    }*/
 }

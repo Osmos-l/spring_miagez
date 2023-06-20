@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: classes-service
+  datasource:
+    url: jdbc:mysql://class-mysql:3306/class-bd
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://annuaire-service:1111/eureka/
+
+logging:
+  level:
+    org.springframework.web: INFO
+
+server:
+  port: 10002
+  error:
+    include-message: always
